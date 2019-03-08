@@ -1,10 +1,49 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Button, TextInput } from 'react-native';
 import {Collapse,CollapseHeader, CollapseBody, AccordionList} from 'accordion-collapse-react-native';
+import axios from 'axios';
+
+
+
 
 // Legal Contract w/ Docusign
 
 export default class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      input: '',
+      data: '',
+      url: ''
+    }
+  }
+
+  // handleChange() {
+
+  // }
+
+  handleSubmit() {
+    axios({
+      method: 'GET',
+      url: 'http://localhost:3000/',
+      data: {
+        "email": 'wilsonli415@gmail.com',
+        "name": 'wilson li',
+        "recipientId": "20",
+        "clientUserId": '1234'
+      }
+    }).then((response) => {
+      // console.log(response);
+        this.setState({
+          url: response,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -133,13 +172,18 @@ export default class App extends React.Component {
 
         <Text>Nanny (Employee) agrees to be fully bound by the terms of this Nanny Agreement.</Text>
         <TextInput style={styles.textInp} placeholder='DocuSign'/>
-        <Text>Family (Employer) agrees to be fully bound by the terms of this Nanny Agreement.</Text>
 
+        <Text>Family (Employer) agrees to be fully bound by the terms of this Nanny Agreement.</Text>
         <TextInput style={styles.textInp} placeholder='DocuSign'/>
+        
         <View style={styles.collapse}>
-            <Button style={styles.textButton} title='Submit'/>
+            <Button style={styles.textButton} onClick={this.handleSubmit.bind(this)} title='Submit'/>
         </View>
-    
+
+        {/* <div>
+          <iframe className="box" src={this.state.url}/>
+        </div> */}
+
       </ScrollView>
       </View>
     );
