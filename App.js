@@ -4,8 +4,6 @@ import {Collapse,CollapseHeader, CollapseBody, AccordionList} from 'accordion-co
 import axios from 'axios';
 
 
-
-
 // Legal Contract w/ Docusign
 
 export default class App extends React.Component {

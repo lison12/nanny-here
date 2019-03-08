@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || 'localhost';
 const fs = require('fs');
+const api = require('./API-Key.js');
 
 //On execution an envelope is sent to the provided email address, one signHere
 //tab is added, the document supplied in workingdirectory\fileName is used.
@@ -18,8 +19,8 @@ const fs = require('fs');
 //Obtain an OAuth token from https://developers.docusign.com/oauth-token-generator
 //Obtain your accountId from account-d.docusign.com > Go To Admin > API and Keys
 
-const OAuthToken = 'eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwAAP2clSKPWSAgAAH-KM4uj1kgCAD_rt3XCbbhJoxQJQFwKOB0VAAEAAAAYAAEAAAAFAAAADQAkAAAAZjBmMjdmMGUtODU3ZC00YTcxLWE0ZGEtMzJjZWNhZTNhOTc4MAAAHibTR6PWSDcAPrsQeqP7-06yR7cHg5wO4w.4lIIYEPYJdkh19NA-xjuWIOdI3JNzHqYh-Cuh0W9kYVB3rfYh7Cbo5lWFT_Xp2FIju4bXSmfXmymOpv0pJvvmhFKAPhMOFGLptZ4VjihU-3DTlbhze-CbHzQ-lJX6gWuS4BhuxZf_KO9Vr0UsM8OcdLj3O0yaL91VJqkvafWgKfXwb9frS7xSF-F3FGnVNlVmzrHDfzUWVjwbtuCPdX_3WrN5Nam2JiLia9Bp1asdg2wgWgEnwLmLwOn-4z03dIhZkj8SP-G0mQjav094JF-ugeaIlOnZqjklRRfU49KoYCX9unzsdU9anXei4CGNZvurf4t_1XtLSWXT1ow8NsOtQ';
-const accountId = '78c64c53-93f1-465b-be6d-bb4207f09d06';
+const OAuthToken = api.OAuthToken;
+const accountId = api.accountId;
 
 
 //Recipient Information goes here
@@ -27,7 +28,7 @@ const recipientName = 'wilson';
 const recipientEmail = 'wilsonli415@gmail.com';
 
 //Point this to the document you wish to send's location on the local machine. Default location is __workingDir\fileName
-const fileName = '';
+const fileName = 'docs/House.pdf';
 
 
 //-------------------------------------------------------------------------------
@@ -132,7 +133,9 @@ app.get('/', function (req, res) {
     recipientViewRequest.email = recipientEmail;
 
     //Create the variable used to handle the response
-    recipientViewResults = docusign.ViewLinkRequest();
+    // recipientViewResults = docusign.ViewLinkRequest();     deprecated
+    recipientViewResults = docusign.ViewUrl();
+
 
     //Make the request for a recipient view
     envelopesApi.createRecipientView(accountId, envelopeId, { recipientViewRequest: recipientViewRequest }, function (err, recipientViewResults, response) {
